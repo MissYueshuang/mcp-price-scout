@@ -18,7 +18,7 @@ stores results in SQLite, and answers comparison queries via a multi-agent workf
 
 ## Running the project
 ```bash
-uv run python main.py          # start interactive chat
+uv run python client.py          # start interactive chat
 uv run python -m pytest        # run tests
 ```
 

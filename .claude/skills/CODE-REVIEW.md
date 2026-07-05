@@ -1,6 +1,12 @@
 ---
 name: code review rubric
 description: use the rubric to check the quality of code for submission
+trigger: when task is code review
+context: fork
+allowed-tools:
+  - Read
+  - Grep
+  - Bash 
 ---
 
 Use this project rubric to understand and assess the project criteria.

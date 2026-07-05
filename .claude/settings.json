@@ -8,7 +8,9 @@
       "Bash: npm run lint*",
       "Bash: git status",
       "Bash: git diff*",
-      "Bash: git log*"
+      "Bash: git log*",
+      "Bash: uv run*",
+      "Bash: python3 *"
     ],
     "deny": [
       "Bash: rm -rf *",
@@ -16,8 +18,51 @@
       "Bash: git reset --hard*",
       "Bash: DROP TABLE*",
       "Bash: curl * | bash"
+    ]
+  },
+  "model": "claude-sonnet-4-20250514",
+  "maxTurns": 50,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[priceScout] Running: '\"$CLAUDE_TOOL_INPUT_COMMAND\" >> .claude/audit.log"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import sys,json,os; inp=json.load(sys.stdin); path=inp.get('file_path',''); sys.exit(1 if any(s in path for s in ['.env','secrets','credentials']) else 0)\" && echo 'Write allowed' || (echo 'BLOCKED: attempt to write sensitive file' && exit 1)"
+          }
+        ]
+      }
     ],
-    "model": "claude-sonnet-4-20250514",
-    "maxTurns": 50
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Users/yueshuang.leng/Desktop/mcp_demo/priceScout && uv run ruff check --quiet . 2>&1 | head -5 || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[priceScout] Session ended at '$(date) >> .claude/audit.log"
+          }
+        ]
+      }
+    ]
   }
 }
