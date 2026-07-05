@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash: npm test*",
+      "Bash: npm run lint*",
+      "Bash: git status",
+      "Bash: git diff*",
+      "Bash: git log*"
+    ],
+    "deny": [
+      "Bash: rm -rf *",
+      "Bash: git push --force*",
+      "Bash: git reset --hard*",
+      "Bash: DROP TABLE*",
+      "Bash: curl * | bash"
+    ],
+    "model": "claude-sonnet-4-20250514",
+    "maxTurns": 50
+  }
+}
